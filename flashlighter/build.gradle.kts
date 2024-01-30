@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -39,7 +41,7 @@ android {
 publishing {
     publications {
         // Creates a Maven publication called "release".
-        create<MavenPublication>("release") {
+        register<MavenPublication>("gpr") {
             // You can then customize attributes of the publication as shown below.
             groupId = "com.lumstep"
             artifactId = "flashlighter"
@@ -52,6 +54,12 @@ publishing {
         maven {
             name = "GithubPackages"
             url = uri("https://maven.pkg.github.com/lumstep/flashlighter")
+            credentials {
+                username =
+                    gradleLocalProperties(rootDir).getProperty("GitHubPackagesUsername").toString()
+                password =
+                    gradleLocalProperties(rootDir).getProperty("GitHubPackagesPassword").toString()
+            }
         }
     }
 }
